@@ -14,7 +14,6 @@
         }
 
         /* --- Custom Light Mode Defaults (Restoring Original Look) --- */
-        /* Ensure inputs and selects have the explicit light mode styling */
         input, select {
             /* Light mode defaults: border-gray-300, bg-white, text-gray-900 */
             border-color: rgb(209 213 219); 
@@ -22,7 +21,6 @@
             color: rgb(17 24 39); 
         }
 
-        /* Ensure labels are correctly colored in light mode */
         label {
             color: rgb(55 65 81); /* text-gray-700 */
         }
@@ -45,9 +43,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 flex items-center justify-center min-h-screen p-4 transition-colors duration-300">
+<body id="pageBody" class="bg-gray-100 flex items-center justify-center min-h-screen p-4 transition-colors duration-300">
     
-    <button id="darkModeToggle" class="absolute top-4 right-4 p-2 rounded-full bg-gray-200 shadow-md hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 z-10" aria-label="Toggle Dark Mode">
+    <button id="darkModeToggle" class="absolute top-4 right-4 p-2 rounded-full bg-gray-200 text-gray-800 shadow-md hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 z-10" aria-label="Toggle Dark Mode">
         <svg id="sunIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
         </svg>
@@ -106,6 +104,7 @@
 
         function setupDarkModeToggle() {
             const html = document.documentElement;
+            const body = document.getElementById('pageBody'); // Get body element
             const toggleButton = document.getElementById('darkModeToggle');
             const sunIcon = document.getElementById('sunIcon');
             const moonIcon = document.getElementById('moonIcon');
@@ -113,15 +112,21 @@
             // Function to set the current theme and icon visibility
             function setTheme(theme) {
                 if (theme === 'dark') {
+                    // Set dark classes
                     html.classList.add('dark');
                     html.classList.remove('light');
-                    toggleButton.classList.remove('light'); // Remove light class on button
+                    body.classList.add('dark:bg-gray-900'); // Explicitly add dark body background
+                    body.classList.remove('bg-gray-100'); // Explicitly remove light body background
+                    toggleButton.classList.remove('light');
                     sunIcon.classList.add('hidden');
                     moonIcon.classList.remove('hidden');
                 } else { // Light mode
+                    // Set light classes
                     html.classList.remove('dark');
                     html.classList.add('light');
-                    toggleButton.classList.add('light'); // Add light class on button
+                    body.classList.remove('dark:bg-gray-900'); // Explicitly remove dark body background
+                    body.classList.add('bg-gray-100'); // Explicitly add light body background
+                    toggleButton.classList.add('light');
                     sunIcon.classList.remove('hidden');
                     moonIcon.classList.add('hidden');
                 }
@@ -135,7 +140,6 @@
             if (savedTheme) {
                 setTheme(savedTheme);
             } else {
-                // Default to light mode if no preference is saved and system doesn't prefer dark
                 setTheme(prefersDark ? 'dark' : 'light'); 
             }
 
