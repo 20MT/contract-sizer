@@ -34,7 +34,6 @@
         .dark label {
             color: rgb(209 213 219); /* text-gray-300 */
         }
-        /* Ensure the button text color is explicitly black in light mode */
         #darkModeToggle.light {
             color: rgb(31 41 55); /* text-gray-800 */
         }
@@ -43,6 +42,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body id="pageBody" class="bg-gray-100 flex items-center justify-center min-h-screen p-4 transition-colors duration-300">
     
     <button id="darkModeToggle" class="absolute top-4 right-4 p-2 rounded-full bg-gray-200 text-gray-800 shadow-md hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 z-10" aria-label="Toggle Dark Mode">
@@ -54,7 +54,7 @@
         </svg>
     </button>
     
-    <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-6 md:p-8 transition-colors duration-300 dark:bg-gray-800 dark:shadow-2xl">
+    <div id="calculatorCard" class="w-full max-w-md bg-white rounded-xl shadow-lg p-6 md:p-8 transition-colors duration-300 dark:bg-gray-800 dark:shadow-2xl">
         <header class="mb-6 text-center">
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Contract Size Calculator</h1>
             <p class="text-gray-500 dark:text-gray-400 mt-1">Instantly find your correct position size.</p>
@@ -104,7 +104,8 @@
 
         function setupDarkModeToggle() {
             const html = document.documentElement;
-            const body = document.getElementById('pageBody'); // Get body element
+            const body = document.getElementById('pageBody');
+            const card = document.getElementById('calculatorCard'); // Get the calculator card
             const toggleButton = document.getElementById('darkModeToggle');
             const sunIcon = document.getElementById('sunIcon');
             const moonIcon = document.getElementById('moonIcon');
@@ -112,20 +113,24 @@
             // Function to set the current theme and icon visibility
             function setTheme(theme) {
                 if (theme === 'dark') {
-                    // Set dark classes
+                    // Set dark classes for HTML, Body, and Card
                     html.classList.add('dark');
                     html.classList.remove('light');
-                    body.classList.add('dark:bg-gray-900'); // Explicitly add dark body background
-                    body.classList.remove('bg-gray-100'); // Explicitly remove light body background
+                    body.classList.add('dark:bg-gray-900'); 
+                    body.classList.remove('bg-gray-100');
+                    card.classList.add('dark:bg-gray-800'); // Ensure dark card background
+                    card.classList.remove('bg-white');      // Remove light card background
                     toggleButton.classList.remove('light');
                     sunIcon.classList.add('hidden');
                     moonIcon.classList.remove('hidden');
                 } else { // Light mode
-                    // Set light classes
+                    // Set light classes for HTML, Body, and Card
                     html.classList.remove('dark');
                     html.classList.add('light');
-                    body.classList.remove('dark:bg-gray-900'); // Explicitly remove dark body background
-                    body.classList.add('bg-gray-100'); // Explicitly add light body background
+                    body.classList.remove('dark:bg-gray-900'); 
+                    body.classList.add('bg-gray-100');
+                    card.classList.remove('dark:bg-gray-800'); // Remove dark card background
+                    card.classList.add('bg-white');            // Ensure light card background (White)
                     toggleButton.classList.add('light');
                     sunIcon.classList.remove('hidden');
                     moonIcon.classList.add('hidden');
