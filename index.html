@@ -7,40 +7,43 @@
     <link rel="icon" href="/images/favicon.png" sizes="32x32" type="image/png">
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
     <link rel="manifest" href="/manifest.json">
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class', 
+        }
+    </script>
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
 
-        /* --- Custom Light Mode Defaults (All Text Very Dark Grey: text-gray-900) --- */
+        /* --- Custom Light Mode Defaults --- */
         input, select {
-            /* Light mode defaults: border-gray-300, bg-white, text-gray-900 */
             border-color: rgb(209 213 219); 
             background-color: white;
-            color: rgb(17 24 39); /* text-gray-900 */
+            color: rgb(17 24 39); 
         }
 
         label {
-            color: rgb(17 24 39); /* text-gray-900 */
+            color: rgb(17 24 39); 
         }
         
-        /* Sub-header text (p element under h1) */
         .light .subheader-text {
-            color: rgb(55 65 81); /* text-gray-700 (Kept slightly lighter for hierarchy) */
+            color: rgb(55 65 81); 
         }
         
-        /* --- Dark Mode Overrides (Applied when <html> has class="dark") --- */
+        /* --- Custom Dark Mode Overrides (Standard CSS) --- */
         .dark input, .dark select {
-            border-color: rgb(75 85 99); /* border-gray-600 */
-            background-color: rgb(55 65 81); /* bg-gray-700 */
+            border-color: rgb(75 85 99); 
+            background-color: rgb(55 65 81); 
             color: white;
         }
         .dark label {
-            color: rgb(209 213 219); /* text-gray-300 */
-        }
-        #darkModeToggle.light {
-            color: rgb(31 41 55); /* text-gray-800 */
+            color: rgb(209 213 219); 
         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,7 +51,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body id="pageBody" class="bg-gray-100 flex items-center justify-center min-h-screen p-4 transition-colors duration-300">
+<body id="pageBody" class="bg-gray-100 dark:bg-gray-900 flex items-center justify-center min-h-screen p-4 transition-colors duration-300">
     
     <button id="darkModeToggle" class="absolute top-4 right-4 p-2 rounded-full bg-gray-200 text-gray-800 shadow-md hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 z-10" aria-label="Toggle Dark Mode">
         <svg id="sunIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -61,13 +64,7 @@
     
     <div id="calculatorCard" class="w-full max-w-md bg-white rounded-xl shadow-lg p-6 md:p-8 transition-colors duration-300 dark:bg-gray-800 dark:shadow-2xl">
         <header class="mb-6 text-center">
-            <div id="calculatorCard" class="w-full max-w-md bg-white rounded-xl shadow-lg p-6 md:p-8 transition-colors duration-300 dark:bg-gray-800 dark:shadow-2xl">
-    <header class="mb-6 text-center">
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Contract Size Calculator</h1>
-        <p class="subheader-text mt-1 dark:text-gray-400">Instantly find your correct position size.</p>
-    </header>
-
-    </div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Contract Size Calculator</h1>
             <p class="subheader-text mt-1 dark:text-gray-400">Instantly find your correct position size.</p>
         </header>
 
@@ -90,7 +87,7 @@
         </div>
 
         <div class="mt-8 pt-6 border-t dark:border-gray-700">
-            <div class="bg-blue-600 dark:bg-indigo-600 text-white p-4 rounded-lg text-center">
+            <div class="bg-blue-600 dark:bg-indigo-600 text-white p-4 rounded-lg text-center transition-colors duration-300">
                 <p class="text-sm font-medium text-blue-200 dark:text-indigo-200">NUMBER OF CONTRACTS</p>
                 <p id="numContracts" class="text-4xl font-bold">0</p>
             </div>
@@ -115,41 +112,25 @@
 
         function setupDarkModeToggle() {
             const html = document.documentElement;
-            const body = document.getElementById('pageBody');
-            const card = document.getElementById('calculatorCard');
             const toggleButton = document.getElementById('darkModeToggle');
             const sunIcon = document.getElementById('sunIcon');
             const moonIcon = document.getElementById('moonIcon');
 
-            // Function to set the current theme and icon visibility
             function setTheme(theme) {
                 if (theme === 'dark') {
-                    // Set dark classes
                     html.classList.add('dark');
                     html.classList.remove('light');
-                    body.classList.add('dark:bg-gray-900'); 
-                    body.classList.remove('bg-gray-100');
-                    card.classList.add('dark:bg-gray-800');
-                    card.classList.remove('bg-white');
-                    toggleButton.classList.remove('light');
                     sunIcon.classList.add('hidden');
                     moonIcon.classList.remove('hidden');
-                } else { // Light mode
-                    // Set light classes
+                } else {
                     html.classList.remove('dark');
                     html.classList.add('light');
-                    body.classList.remove('dark:bg-gray-900'); 
-                    body.classList.add('bg-gray-100');
-                    card.classList.remove('dark:bg-gray-800'); 
-                    card.classList.add('bg-white');
-                    toggleButton.classList.add('light');
                     sunIcon.classList.remove('hidden');
                     moonIcon.classList.add('hidden');
                 }
                 localStorage.setItem('theme', theme);
             }
 
-            // --- Initial Theme Check ---
             const savedTheme = localStorage.getItem('theme');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -159,7 +140,6 @@
                 setTheme(prefersDark ? 'dark' : 'light'); 
             }
 
-            // Event listener for the toggle button
             toggleButton.addEventListener('click', () => {
                 const currentTheme = html.classList.contains('dark') ? 'dark' : 'light';
                 const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -171,7 +151,6 @@
             const inputs = document.querySelectorAll('input, select');
             inputs.forEach(input => input.addEventListener('input', calculate));
             calculate(); 
-            
             setupDarkModeToggle(); 
         });
     </script>
